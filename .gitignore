@@ -1,2 +1,12 @@
 bloonstd_moved.swf
 flashplayer
+__pycache__/
+
+# virtualenv stuff
+.env/
+bin/
+env/
+lib/
+share/
+include/
+pip-selfcheck.json
