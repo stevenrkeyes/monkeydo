@@ -4,6 +4,8 @@ import pyautogui
 import subprocess
 import time
 import pytesseract
+import numpy
+from PIL import Image
 
 import game_constants
 import towers
@@ -28,12 +30,22 @@ def get_average_color(im):
             count += 1
     return ((r/count), (g/count), (b/count))
 
+# Use .frombytes instead of .fromarray. 
+# This is >2x faster than img_grey
+def img_frombytes(data):
+    size = data.shape[::-1]
+    databytes = numpy.packbits(data, axis=1)
+    return Image.frombytes(mode='1', size=size, data=databytes)
+
 class game_manager:
 	def __init__(self):
 		self.anchor_x = None
 		self.anchor_y = None
 		self.window_width = None
 		self.window_height = None
+
+		img = Image.open("occupancy_grid.png")
+		self.occupancy_grid = numpy.array(img, dtype=bool)
 
 	def relative_coords_to_absolute(self, relative_coords):
 		# translates from coordinates relative to the window anchor to screen coordinates 
@@ -127,11 +139,20 @@ class game_manager:
 			self.click(game_constants.super_tower_button_coords)
 
 	def build_tower(self, tower_type, coords):
-		self.click_tower_button(tower_type)
-		# the caller of this function must determine if the location is feasible
-		# otherwise it will not actually be built
-		self.click(coords)
-		# todo: call ESC keypress in case the tower was not actually built
+		if not self.is_occupied(coords):
+			self.click_tower_button(tower_type)
+			time.sleep(0.1)
+			self.click(coords)
+			# update the occupancy grid
+			b, a = coords
+			r = 12
+			nx, ny = self.occupancy_grid.shape
+			y, x = numpy.ogrid[-a:nx-a, -b:ny-b]
+			mask = x*x + y*y <= r*r
+			self.occupancy_grid[mask] = True
+
+	def is_occupied(self, coords):
+		return self.occupancy_grid[coords[1], coords[0]]
 
 	# use a screenshot to visually determine if a tower can be built somewhere
 	def is_feasible_test(self, coords):
