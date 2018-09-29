@@ -70,7 +70,10 @@ class game_manager:
 
 	def click(self, relative_coords):
 		(abs_x, abs_y) = self.relative_coords_to_absolute(relative_coords)
-		pyautogui.click(x=abs_x, y=abs_y)
+		pyautogui.moveTo(x=abs_x, y=abs_y)
+		# if you click right away, the click is unreliable for some reason
+		time.sleep(0.2)
+		pyautogui.click()
 
 	def click_start_round(self):
 		self.click(game_constants.start_button_coords)
@@ -141,7 +144,6 @@ class game_manager:
 	def build_tower(self, tower_type, coords):
 		if not self.is_occupied(coords):
 			self.click_tower_button(tower_type)
-			time.sleep(0.1)
 			self.click(coords)
 			# update the occupancy grid
 			b, a = coords

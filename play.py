@@ -27,16 +27,16 @@ towers_build = []
 build_order = []
 build_order_delays = []
 
-for i in range(10):
+for i in range(30):
 	#action_enum = random.randint(5 + 2*len(towers))
 	action_enum = random.randint(0,5)
 	#switch based on action type
 	tower_type = towers.tower_types.DART
 	x = random.randint(0, game_constants.map_width-1)
-	y = random.randint(game_constants.url_bar_height, gm.window_height)
+	y = random.randint(game_constants.url_bar_height, gm.window_height-1)
 	while gm.is_occupied((x,y)):
 		x = random.randint(0, game_constants.map_width-1)
-		y = random.randint(game_constants.url_bar_height, gm.window_height)
+		y = random.randint(game_constants.url_bar_height, gm.window_height-1)
 	gm.build_tower(tower_type, (x, y))
 	build_order.append(tower_type)
 
@@ -48,8 +48,11 @@ for i in range(10):
 
 	time.sleep(wait_time)
 
-print(build_order)
-print(build_order_delays)
+t = 0
+print("Build order:")
+for i in range(len(build_order)):
+	print('{:>10}'.format(round(t, 3)), "sec:", build_order[i])
+	t += build_order_delays[i]
 print(gm.get_stats())
 
 '''
