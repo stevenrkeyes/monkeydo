@@ -26,3 +26,9 @@ stats_box_width = 153
 stats_box_height = 82
 
 tower_interference_radius = 25
+
+dart_tower_cost = 250
+tack_tower_cost = 400
+ice_tower_cost = 850
+bomb_tower_cost = 900
+super_tower_cost = 4000

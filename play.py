@@ -27,7 +27,8 @@ towers_build = []
 build_order = []
 build_order_delays = []
 
-for i in range(30):
+lives = 40
+while lives > 0:
 	#action_enum = random.randint(5 + 2*len(towers))
 	action_enum = random.randint(0,5)
 	#switch based on action type
@@ -37,16 +38,18 @@ for i in range(30):
 	while gm.is_occupied((x,y)):
 		x = random.randint(0, game_constants.map_width-1)
 		y = random.randint(game_constants.url_bar_height, gm.window_height-1)
-	gm.build_tower(tower_type, (x, y))
-	build_order.append(tower_type)
-
-	time.sleep(0.2)
-
 	wait_time = random.uniform(0, max_wait)
-	build_order_delays.append(wait_time)
+	if gm.can_afford_tower(tower_type):
+		gm.build_tower(tower_type, (x, y))
+		build_order.append(tower_type)
+		build_order_delays.append(wait_time)
+	else:
+		build_order_delays[-1] += wait_time
+
 	gm.click_start_round()
 
 	time.sleep(wait_time)
+	lives = gm.get_stats()[1]
 
 t = 0
 print("Build order:")

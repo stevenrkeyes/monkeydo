@@ -153,6 +153,19 @@ class game_manager:
 			mask = x*x + y*y <= r*r
 			self.occupancy_grid[mask] = True
 
+	def can_afford_tower(self, tower_type):
+		r, m, l = self.get_stats()
+		if tower_type == towers.tower_types.DART:
+			return m >= game_constants.dart_tower_cost
+		if tower_type == towers.tower_types.TACK:
+			return m >= game_constants.tack_tower_cost
+		if tower_type == towers.tower_types.ICE:
+			return m >= game_constants.ice_tower_cost
+		if tower_type == towers.tower_types.BOMB:
+			return m >= game_constants.bomb_tower_cost
+		if tower_type == towers.tower_types.SUPER:
+			return m >= game_constants.super_tower_cost
+
 	def is_occupied(self, coords):
 		return self.occupancy_grid[coords[1], coords[0]]
 
