@@ -147,7 +147,7 @@ class game_manager:
 			self.click(coords)
 			# update the occupancy grid
 			b, a = coords
-			r = 12
+			r = 13
 			nx, ny = self.occupancy_grid.shape
 			y, x = numpy.ogrid[-a:nx-a, -b:ny-b]
 			mask = x*x + y*y <= r*r
