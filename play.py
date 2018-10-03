@@ -5,7 +5,7 @@ import game_manager
 import game_constants
 import towers
 
-gm = game_manager.game_manager()
+gm = game_manager.GameManager()
 gm.start()
 
 print("hi")
@@ -32,7 +32,7 @@ while lives > 0:
 	#action_enum = random.randint(5 + 2*len(towers))
 	action_enum = random.randint(0,5)
 	#switch based on action type
-	tower_type = towers.tower_types.DART
+	tower_type = towers.TowerTypes.DART
 	x = random.randint(0, game_constants.map_width-1)
 	y = random.randint(game_constants.url_bar_height, gm.window_height-1)
 	while gm.is_occupied((x,y)):

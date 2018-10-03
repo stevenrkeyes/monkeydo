@@ -37,7 +37,7 @@ def img_frombytes(data):
     databytes = numpy.packbits(data, axis=1)
     return Image.frombytes(mode='1', size=size, data=databytes)
 
-class game_manager:
+class GameManager:
 	def __init__(self):
 		self.anchor_x = None
 		self.anchor_y = None
@@ -130,15 +130,15 @@ class game_manager:
 		return (round_number, money, lives)
 
 	def click_tower_button(self, tower_type):
-		if tower_type == towers.tower_types.DART:
+		if tower_type == towers.TowerTypes.DART:
 			self.click(game_constants.dart_tower_button_coords)
-		if tower_type == towers.tower_types.TACK:
+		if tower_type == towers.TowerTypes.TACK:
 			self.click(game_constants.tack_tower_button_coords)
-		if tower_type == towers.tower_types.ICE:
+		if tower_type == towers.TowerTypes.ICE:
 			self.click(game_constants.ice_tower_button_coords)
-		if tower_type == towers.tower_types.BOMB:
+		if tower_type == towers.TowerTypes.BOMB:
 			self.click(game_constants.bomb_tower_button_coords)
-		if tower_type == towers.tower_types.SUPER:
+		if tower_type == towers.TowerTypes.SUPER:
 			self.click(game_constants.super_tower_button_coords)
 
 	def build_tower(self, tower_type, coords):
@@ -155,15 +155,15 @@ class game_manager:
 
 	def can_afford_tower(self, tower_type):
 		r, m, l = self.get_stats()
-		if tower_type == towers.tower_types.DART:
+		if tower_type == towers.TowerTypes.DART:
 			return m >= game_constants.dart_tower_cost
-		if tower_type == towers.tower_types.TACK:
+		if tower_type == towers.TowerTypes.TACK:
 			return m >= game_constants.tack_tower_cost
-		if tower_type == towers.tower_types.ICE:
+		if tower_type == towers.TowerTypes.ICE:
 			return m >= game_constants.ice_tower_cost
-		if tower_type == towers.tower_types.BOMB:
+		if tower_type == towers.TowerTypes.BOMB:
 			return m >= game_constants.bomb_tower_cost
-		if tower_type == towers.tower_types.SUPER:
+		if tower_type == towers.TowerTypes.SUPER:
 			return m >= game_constants.super_tower_cost
 
 	def is_occupied(self, coords):
@@ -171,7 +171,7 @@ class game_manager:
 
 	# use a screenshot to visually determine if a tower can be built somewhere
 	def is_feasible_test(self, coords):
-		self.click_tower_button(towers.tower_types.DART)
+		self.click_tower_button(towers.TowerTypes.DART)
 		(abs_x, abs_y) = self.relative_coords_to_absolute(coords)
 		pyautogui.moveTo(abs_x, abs_y)
 		bounding_box = (self.anchor_x,
