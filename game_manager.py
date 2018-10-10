@@ -4,16 +4,18 @@ import pyautogui
 import subprocess
 import time
 import pytesseract
-import numpy
-from PIL import Image
 
 import game_constants
 import towers
+import map_manager
 
 def get_numbers(string_with_numbers):
 	# only get the characters that are numbers
 	new_string = ''.join(ch for ch in string_with_numbers if ch.isdigit())
-	return int(new_string)
+	try:
+		return int(new_string)
+	except ValueError:
+		return 1
 
 def get_average_color(im):
     # Returns a 3-tuple containing the RGB value of the average color of the image
@@ -44,8 +46,7 @@ class GameManager:
 		self.window_width = None
 		self.window_height = None
 
-		img = Image.open("occupancy_grid.png")
-		self.occupancy_grid = numpy.array(img, dtype=bool)
+		self.mm = map_manager.MapManager("occupancy_grid.png")
 
 	def relative_coords_to_absolute(self, relative_coords):
 		# translates from coordinates relative to the window anchor to screen coordinates 
@@ -146,12 +147,7 @@ class GameManager:
 			self.click_tower_button(tower_type)
 			self.click(coords)
 			# update the occupancy grid
-			b, a = coords
-			r = 13
-			nx, ny = self.occupancy_grid.shape
-			y, x = numpy.ogrid[-a:nx-a, -b:ny-b]
-			mask = x*x + y*y <= r*r
-			self.occupancy_grid[mask] = True
+			self.mm.add_object(coords, game_constants.tower_interference_radius)
 
 	def can_afford_tower(self, tower_type):
 		r, m, l = self.get_stats()
@@ -167,7 +163,7 @@ class GameManager:
 			return m >= game_constants.super_tower_cost
 
 	def is_occupied(self, coords):
-		return self.occupancy_grid[coords[1], coords[0]]
+		return self.mm.is_occupied(coords)
 
 	# use a screenshot to visually determine if a tower can be built somewhere
 	def is_feasible_test(self, coords):
