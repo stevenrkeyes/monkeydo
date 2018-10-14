@@ -21,4 +21,4 @@ In addition to the python requirements in requirements.txt, you will need:
   2. download the Flash Player projector
   3. extract the file you download and copy the "flashplayer" executable to the project directory
 - tesseract-ocr: `sudo apt-get install tesseract-ocr`
-
+- tkinter: `sudo apt-get install python3-tk`

@@ -10,3 +10,6 @@ lib/
 share/
 include/
 pip-selfcheck.json
+
+# play logs
+*.pkl

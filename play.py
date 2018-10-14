@@ -1,4 +1,5 @@
 import random
+import pickle
 
 import game_constants
 import towers
@@ -25,6 +26,11 @@ for i in range(1):
 	build_order.append(step)
 
 end_time, build_order_index, stats_list = play_build_order.play(build_order)
+
+with open('data.pkl', 'wb') as f:
+	data = (build_order, build_order_index, stats_list)
+	pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
+
 
 '''
 t = 0

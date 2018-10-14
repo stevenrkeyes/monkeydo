@@ -1,12 +1,17 @@
+cycler==0.10.0
+kiwisolver==1.0.1
 lxml==4.2.5
+matplotlib==3.0.0
 numpy==1.15.1
 Pillow==5.2.0
 pkg-resources==0.0.0
 PyAutoGUI==0.9.38
 pylzma==0.4.9
 PyMsgBox==1.0.6
+pyparsing==2.2.2
 PyScreeze==0.1.18
 pytesseract==0.2.4
+python-dateutil==2.7.3
 PyTweening==1.0.3
 six==1.11.0
 xlib==0.21
