@@ -117,6 +117,18 @@ class GameManager:
 		print(text)
 		lines = text.split("\n")
 
+		# This is a hack; sometimes the ocr parses the lives as two columns instead of 
+		# three lines, and then it returns the three elements of the first column followed
+		# by a blank line followed by the three elements of the last column
+		if len(lines) == 7:
+			lines = [lines[0] + lines[4],
+			         lines[1] + lines[5],
+			         lines[2] + lines[6]]
+		if len(lines) == 6:
+			lines = [lines[0] + lines[3],
+			         lines[1] + lines[4],
+			         lines[2] + lines[5]]
+
 		# make sure we got all the stats and that tesseract didn't mess up
 		# also, tesseract is bad at differentiating between Os and 0s, so help it out
 		if "Round" not in lines[0]:
