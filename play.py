@@ -10,11 +10,12 @@ import play_build_order
 # make up a build order, using a map_manager to avoid invalid tower placements
 mm = map_manager.MapManager("occupancy_grid.png")
 build_order = []
-for i in range(1):
+for i in range(10):
 	#action_enum = random.randint(5 + 2*len(towers))
-	action_enum = random.randint(0,5)
+	action_enum = random.randint(0,4)
 	#switch based on action type
-	tower_type = towers.TowerTypes.DART
+
+	tower_type = towers.TowerTypes(action_enum)
 	x = random.randint(0, mm.shape[1] - 1)
 	y = random.randint(game_constants.url_bar_height, mm.shape[0] - 1)
 	while mm.is_occupied((x,y)):
@@ -23,6 +24,7 @@ for i in range(1):
 	coords = (x, y)
 	mm.add_object(coords, game_constants.tower_interference_radius)
 	step = play_build_order.BuildOrderStep(tower_type, coords)
+	print(step)
 	build_order.append(step)
 
 end_time, build_order_index, stats_list = play_build_order.play(build_order)

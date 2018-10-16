@@ -1,11 +1,11 @@
 import enum
 
 class TowerTypes(enum.IntEnum):
-	DART = 1
-	TACK = 2
-	ICE = 3
-	BOMB = 4
-	SUPER = 5
+	DART = 0
+	TACK = 1
+	ICE = 2
+	BOMB = 3
+	SUPER = 4
 
 class Tower:
 	def __init__(self, coords, tower_type):
