@@ -38,12 +38,13 @@ def generate_build_orders(num_to_generate):
 	for i in range(num_to_generate):
 		build_order = generate_build_order()
 		build_orders.append(build_order)
+	return build_orders
 
 if __name__ == "__main__":
 	if len(sys.argv) != 2:
 		print()
 		print("You must pass a name for the generation file. Example:")
-		print("   $ python generate_build_order.py gen_0")
+		print("   $ python generate_build_orders.py gen_0")
 		print()
 		sys.exit()
 
