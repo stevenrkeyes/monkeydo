@@ -1,7 +1,26 @@
+import sys
 import pickle
 import matplotlib.pyplot as plt
 
-f = open("data.pkl", "rb")
+
+if len(sys.argv) > 2:
+	print()
+	print("Ignoring extra parameters")
+	print()
+
+	build_orders = generate_build_orders(NUM_TO_GENERATE)
+
+# default filename
+filename = "data.pkl"
+
+if len(sys.argv) == 2:
+	user_specified_filename = sys.argv[1]
+	if user_specified_filename.endswith(".pkl"):
+		filename = user_specified_filename
+	else:
+		filename = user_specified_filename + ".pkl"
+
+f = open(filename, "rb")
 data = pickle.load(f)
 f.close()
 
