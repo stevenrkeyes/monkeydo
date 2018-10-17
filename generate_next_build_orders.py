@@ -39,6 +39,9 @@ def randint_except(a, b, except_n):
 	r = list(range(a, except_n)) + list(range(except_n + 1, b))
 	return random.choice(r)
 
+def concise_str(build_order):
+	return ' '.join([str(step) for step in build_order])
+
 if __name__ == "__main__":
 	if len(sys.argv) != 3:
 		print()
@@ -68,8 +71,9 @@ if __name__ == "__main__":
 
 	for i in range(len(list_of_build_order_stats)):
 		build_order_stats = list_of_build_order_stats[i]
+		parent_build_order = build_order_stats[0]
 		print(sys.argv[1] + "_" + str(i))
-		print(build_order_stats[0])
+		print(concise_str(parent_build_order))
 		print(fitness(build_order_stats))
 		print()
 
@@ -89,7 +93,7 @@ if __name__ == "__main__":
 	for elite_survivor_stats in sorted_list_of_build_order_stats[:num_elite_survivors]:
 		elite_survivor_build_order = elite_survivor_stats[0]
 		child_build_orders.append(elite_survivor_build_order)
-		print("    " + str(elite_survivor_build_order))
+		print("    " + concise_str(elite_survivor_build_order))
 		print("    with fitness " + str(fitness(elite_survivor_stats)))
 	print()
 
@@ -110,7 +114,7 @@ if __name__ == "__main__":
 		chosen_survivor_stats = sorted_remaining_build_order_stats[i]
 		chosen_survivor_build_order = chosen_survivor_stats[0]
 		child_build_orders.append(chosen_survivor_build_order)
-		print("    " + str(chosen_survivor_build_order))
+		print("    " + concise_str(chosen_survivor_build_order))
 		print("    with fitness " + str(fitness(chosen_survivor_stats)))
 
 
@@ -157,7 +161,7 @@ if __name__ == "__main__":
 
 	print("Generated new child build orders:")
 	for build_order in generated_build_orders:
-		print("    " + str(build_order))
+		print("    " + concise_str(build_order))
 		child_build_orders.append(build_order)
 
 	with open(child_generation_filename, 'wb') as f:

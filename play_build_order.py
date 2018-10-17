@@ -9,9 +9,13 @@ class BuildOrderStep:
 		self.tower_type = tower_type
 		self.coords = coords
 
+	# I'm using __str__ as the concise representation
+	def __str__(self):
+		return ["Dart", "Tack", "Ice", "Bomb", "Super"][self.tower_type]
+
+	# __repr__ is the unambiguous representation
 	def __repr__(self):
-		s = ["Dart", "Tack", "Ice", "Bomb", "Super"][self.tower_type]
-		return s + " Tower at " + str(self.coords[0]) + ", " + str(self.coords[1])
+		return self.__str__() + " Tower at " + str(self.coords[0]) + ", " + str(self.coords[1])
 
 # build_order is a list of build_order_step
 # this function returns the time at which the game ended, the index of the last build order
