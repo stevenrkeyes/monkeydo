@@ -40,8 +40,8 @@ if __name__ == "__main__":
 	child_generation_filename = sys.argv[2] + ".pkl"
 
 	with open(parent_generation_filename, 'rb') as f:
-		build_orders = pickle.load(f)
-	num_parents = len(build_orders)
+		build_orders1, build_orders2 = pickle.load(f)
+	num_parents = len(build_orders1) + len(build_orders2)
 
 	# the stats for each build order
 	list_of_build_order_stats = []
@@ -138,9 +138,9 @@ if __name__ == "__main__":
 				new_x = min(max(0, new_x), mm.shape[1] - 1)
 				new_y = min(max(game_constants.url_bar_height, new_y), mm.shape[0] - 1)
 				while mm.is_occupied((new_x, new_y)):
-					dx = random.randint(-POSITION_MUTATION_STEP_SIZE,
+					dx = random.randint(-evolutionary_constants.POSITION_MUTATION_STEP_SIZE,
 						evolutionary_constants.POSITION_MUTATION_STEP_SIZE)
-					dy = random.randint(-POSITION_MUTATION_STEP_SIZE,
+					dy = random.randint(-evolutionary_constants.POSITION_MUTATION_STEP_SIZE,
 						evolutionary_constants.POSITION_MUTATION_STEP_SIZE)
 					new_x = x + dx
 					new_y = y + dy
