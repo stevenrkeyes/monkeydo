@@ -38,13 +38,13 @@ def play(build_order):
 		stats = gm.get_stats()
 		lives = stats[2]
 		stats_list.append((time.time() - start_time, stats))
+	print("Got to end of build order")
 	while lives > 0:
 		time.sleep(0.1)
 		gm.click_start_round()
 		stats = gm.get_stats()
 		lives = stats[2]
 		stats_list.append((time.time() - start_time, stats))
-		print(lives)
 	gm.end()
 	end_time = stats_list[-1][0]
 	return end_time, build_order_index, stats_list

@@ -20,6 +20,7 @@ if __name__ == "__main__":
 		build_orders = pickle.load(f)
 
 	for i in range(len(build_orders)):
+		print("Running build order " + sys.argv[1] + "_" + str(i))
 		build_order = build_orders[i]
 		end_time, build_order_index, stats_list = play_build_order.play(build_order)
 		filename = sys.argv[1] + "_" + str(i) + "_stats" + ".pkl"

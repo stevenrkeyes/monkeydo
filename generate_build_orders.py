@@ -9,15 +9,13 @@ import game_constants
 import towers
 import map_manager
 import play_build_order
-
-BUILD_ORDER_LENGTH = 20
-NUM_TO_GENERATE = 20
+import evolutionary_constants
 
 def generate_build_order():
 	# make up a build order, using a map_manager to avoid invalid tower placements
 	mm = map_manager.MapManager("occupancy_grid.png")
 	build_order = []
-	for i in range(BUILD_ORDER_LENGTH):
+	for i in range(evolutionary_constants.BUILD_ORDER_LENGTH):
 		#action_enum = random.randint(5 + 2*len(towers))
 		action_enum = random.randint(0,4)
 
@@ -48,7 +46,7 @@ if __name__ == "__main__":
 		print()
 		sys.exit()
 
-	build_orders = generate_build_orders(NUM_TO_GENERATE)
+	build_orders = generate_build_orders(evolutionary_constants.NUM_TO_GENERATE)
 
 	filename = sys.argv[1] + ".pkl"
 	with open(filename, 'wb') as f:

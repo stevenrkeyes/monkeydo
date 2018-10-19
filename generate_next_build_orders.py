@@ -10,21 +10,7 @@ import game_constants
 import towers
 import map_manager
 import play_build_order
-
-# the proportion of of the parents that definitely survive onto the next generation based on
-# fitness
-ELITIST_FRACTION = 0.2
-
-# the proportion of the parents after the elite parents that are randomly picked (weighted
-# by fitness) to survive onto the next generation
-SURVIVAL_FRATION = 0.3
-# the probability that a parent will be picked based on its rank
-SURVIVAL_PROBABILITY = 0.7
-
-CROSSOVER_PROBABILITY = 0.5
-POSITION_MUTATION_PROBABILITY = 0.5
-POSITION_MUTATION_STEP_SIZE = 40
-TOWER_MUTATION_PROBABILITY = 0.2
+import evolutionary_constants
 
 def fitness(build_order_stats):
 	# the fitness will be defined as a function of the last round acheieved,
@@ -81,8 +67,8 @@ if __name__ == "__main__":
 	print("Generating next generation...")
 	print()
 
-	num_elite_survivors = round(ELITIST_FRACTION * num_parents)
-	num_fit_survivors = round(SURVIVAL_FRATION * num_parents)
+	num_elite_survivors = round(evolutionary_constants.ELITIST_FRACTION * num_parents)
+	num_fit_survivors = round(evolutionary_constants.SURVIVAL_FRACTION * num_parents)
 	num_to_generate = num_parents - num_elite_survivors - num_fit_survivors
 
 	sorted_list_of_build_order_stats = list(reversed(sorted(list_of_build_order_stats, key = fitness)))
@@ -104,8 +90,11 @@ if __name__ == "__main__":
 	# survivors in fitness rank order and picking one with probability SURVIVAL_PROBABILITY
 	p = []
 	for i in range(num_remaining - 1):
-		p.append((1 - SURVIVAL_PROBABILITY)**i * SURVIVAL_PROBABILITY)
-	p.append((1 - SURVIVAL_PROBABILITY)**(num_remaining - 1))
+		p_none_previous_chosen = (1 - evolutionary_constants.SURVIVAL_PROBABILITY)**i
+		p_this_one_chosen = p_none_previous_chosen * evolutionary_constants.SURVIVAL_PROBABILITY
+		p.append(p_this_one_chosen)
+	p_last = (1 - evolutionary_constants.SURVIVAL_PROBABILITY)**(num_remaining - 1)
+	p.append(p_last)
 
 	chosen_survivor_indices = numpy.random.choice(range(num_remaining), size=num_fit_survivors, replace=False, p=p)
 
@@ -136,24 +125,28 @@ if __name__ == "__main__":
 		mm = map_manager.MapManager("occupancy_grid.png")
 		for i in range(len(new_build_order)):
 			step = new_build_order[i]
-			if random.uniform(0, 1) < POSITION_MUTATION_PROBABILITY:
+			if random.uniform(0, 1) < evolutionary_constants.POSITION_MUTATION_PROBABILITY:
 				x, y = step.coords
-				dx = random.randint(-POSITION_MUTATION_STEP_SIZE, POSITION_MUTATION_STEP_SIZE)
-				dy = random.randint(-POSITION_MUTATION_STEP_SIZE, POSITION_MUTATION_STEP_SIZE)
+				dx = random.randint(-evolutionary_constants.POSITION_MUTATION_STEP_SIZE, \
+					evolutionary_constants.POSITION_MUTATION_STEP_SIZE)
+				dy = random.randint(-evolutionary_constants.POSITION_MUTATION_STEP_SIZE,
+					evolutionary_constants.POSITION_MUTATION_STEP_SIZE)
 				new_x = x + dx
 				new_y = y + dy
 				new_x = min(max(0, new_x), mm.shape[1] - 1)
 				new_y = min(max(game_constants.url_bar_height, new_y), mm.shape[0] - 1)
 				while mm.is_occupied((new_x, new_y)):
-					dx = random.randint(-POSITION_MUTATION_STEP_SIZE, POSITION_MUTATION_STEP_SIZE)
-					dy = random.randint(-POSITION_MUTATION_STEP_SIZE, POSITION_MUTATION_STEP_SIZE)
+					dx = random.randint(-POSITION_MUTATION_STEP_SIZE,
+						evolutionary_constants.POSITION_MUTATION_STEP_SIZE)
+					dy = random.randint(-POSITION_MUTATION_STEP_SIZE,
+						evolutionary_constants.POSITION_MUTATION_STEP_SIZE)
 					new_x = x + dx
 					new_y = y + dy
 					new_x = min(max(0, new_x), mm.shape[1] - 1)
 					new_y = min(max(game_constants.url_bar_height, new_y), mm.shape[0] - 1)
 				step.coords = (new_x, new_y)
 			mm.add_object(step.coords, game_constants.tower_interference_radius)
-			if random.uniform(0, 1) < TOWER_MUTATION_PROBABILITY:
+			if random.uniform(0, 1) < evolutionary_constants.TOWER_MUTATION_PROBABILITY:
 				# mutate the tower
 				new_tower_type = randint_except(0, towers.TowerTypes.SUPER, step.tower_type)
 				step.tower_type = new_tower_type
