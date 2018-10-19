@@ -73,12 +73,12 @@ if __name__ == "__main__":
 
 	sorted_list_of_build_order_stats = list(reversed(sorted(list_of_build_order_stats, key = fitness)))
 
-	child_build_orders = []
+	surviving_build_order_results = []
 
 	print("Sending elite build orders on to the next generation:")
 	for elite_survivor_stats in sorted_list_of_build_order_stats[:num_elite_survivors]:
 		elite_survivor_build_order = elite_survivor_stats[0]
-		child_build_orders.append(elite_survivor_build_order)
+		surviving_build_order_results.append(elite_survivor_stats)
 		print("    " + concise_str(elite_survivor_build_order))
 		print("    with fitness " + str(fitness(elite_survivor_stats)))
 	print()
@@ -102,7 +102,7 @@ if __name__ == "__main__":
 	for i in chosen_survivor_indices:
 		chosen_survivor_stats = sorted_remaining_build_order_stats[i]
 		chosen_survivor_build_order = chosen_survivor_stats[0]
-		child_build_orders.append(chosen_survivor_build_order)
+		surviving_build_order_results.append(chosen_survivor_stats)
 		print("    " + concise_str(chosen_survivor_build_order))
 		print("    with fitness " + str(fitness(chosen_survivor_stats)))
 
@@ -112,9 +112,11 @@ if __name__ == "__main__":
 	num_survivors = num_elite_survivors + num_fit_survivors
 	max_survivor_index = num_survivors - 1
 
+	surviving_build_orders = [b[0] for b in surviving_build_order_results]
+
 	for i in range(num_to_generate):
 		parent_build_order_index = random.randint(0, max_survivor_index)
-		new_build_order = copy.deepcopy(child_build_orders[parent_build_order_index])
+		new_build_order = copy.deepcopy(surviving_build_orders[parent_build_order_index])
 		# todo: figure out a way to do crossover that won't cause towers to collide
 		#if random.uniform(0, 1) < CROSSOVER_PROBABILITY:
 		#	crossed_parent_index = randint_except(0, max_survivor_index, parent_build_order_index)
@@ -155,8 +157,7 @@ if __name__ == "__main__":
 	print("Generated new child build orders:")
 	for build_order in generated_build_orders:
 		print("    " + concise_str(build_order))
-		child_build_orders.append(build_order)
 
 	with open(child_generation_filename, 'wb') as f:
-		pickle.dump(child_build_orders, f, pickle.HIGHEST_PROTOCOL)
+		pickle.dump((surviving_build_order_results, generated_build_orders), f, pickle.HIGHEST_PROTOCOL)
 

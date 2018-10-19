@@ -48,6 +48,8 @@ if __name__ == "__main__":
 
 	build_orders = generate_build_orders(evolutionary_constants.NUM_TO_GENERATE)
 
+	pretested_build_order_results = []
+
 	filename = sys.argv[1] + ".pkl"
 	with open(filename, 'wb') as f:
-		pickle.dump(build_orders, f, pickle.HIGHEST_PROTOCOL)
+		pickle.dump((pretested_build_order_results, build_orders), f, pickle.HIGHEST_PROTOCOL)
